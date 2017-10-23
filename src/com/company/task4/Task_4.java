@@ -1,4 +1,4 @@
-package com.company;
+package com.company.task4;
 
 import javafx.util.Pair;
 import org.json.simple.JSONObject;
@@ -8,7 +8,7 @@ import org.json.simple.parser.ParseException;
 import java.io.*;
 import java.util.*;
 
-public class Main {
+public class Task_4 {
 
     public static void main(String[] args) {
         HashMap<String, Pair<Object, String>> idToCitationMap = readJson();
