@@ -11,27 +11,7 @@ import java.util.*;
 public class Main {
 
     public static void main(String[] args) {
-        HashMap<String, Object> idToCitationMap = new HashMap<>();
-        JSONObject obj;
-        String inFileName = "C:\\Users\\Elijah\\Documents\\CS3219\\extract.txt";
-        String line = null;
-        int count = 0;
-        try {
-            FileReader fileReader = new FileReader(inFileName);
-            try (BufferedReader bufferedReader = new BufferedReader(fileReader)) {
-                while ((line = bufferedReader.readLine()) != null) {
-                    obj = (JSONObject) new JSONParser().parse(line);
-                    idToCitationMap.put(obj.get("id").toString(), obj.get("inCitations"));
-                }
-                bufferedReader.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        HashMap<String, Pair<Object, String>> idToCitationMap = readJson();
 
         ArrayList<Pair<Integer, Integer>> edges = new ArrayList<Pair<Integer, Integer>>();
         HashMap<String, Integer> nodesToSeq = new HashMap<String, Integer>();
@@ -49,42 +29,67 @@ public class Main {
                 String currID = queue.poll();
                 int currCount = nodesToSeq.get(currID);
                 int tier = tierQueue.poll();
-                if (idToCitationMap.containsKey(currID)) {
-                    ArrayList<String> nextIDs = (ArrayList<String>) idToCitationMap.get(currID);
-                    for (String ID : nextIDs) {
-                        if ((!nodesToSeq.containsKey(ID)) && tier < 2) {
-                            nodesCount++;
-                            queue.add(ID);
-                            tierQueue.add(tier + 1);
-                            nodesToSeq.put(ID, nodesCount);
-                            seqToNodes.put(nodesCount, ID);
-                            edges.add(new Pair(currCount, nodesCount));
-                        }
+
+                ArrayList<String> nextIDs = (ArrayList<String>) idToCitationMap.get(currID).getKey();
+                for (String ID : nextIDs) {
+                    if ((idToCitationMap.containsKey(ID)) && (!nodesToSeq.containsKey(ID)) && tier < 2) {
+                        nodesCount++;
+                        queue.add(ID);
+                        tierQueue.add(tier + 1);
+                        nodesToSeq.put(ID, nodesCount);
+                        seqToNodes.put(nodesCount, ID);
+                        edges.add(new Pair<>(currCount, nodesCount));
                     }
                 }
             }
-        System.out.println(nodesCount);
-        System.out.println(edges.size());
 
-        String outFileName = "C:\\Users\\Elijah\\Documents\\CS3219\\task 4 json.txt";
+        WriteJson(idToCitationMap, edges, seqToNodes, nodesCount);
+    }
+
+    private static HashMap<String, Pair<Object, String>> readJson() {
+        HashMap<String, Pair<Object, String>> idToCitationMap = new HashMap<String, Pair<Object, String>>();
+        JSONObject obj;
+        String inFileName = "C:\\Users\\Elijah\\Documents\\CS3219\\extract.txt";
+        String line = null;
+        int count = 0;
+        try {
+            FileReader fileReader = new FileReader(inFileName);
+            try (BufferedReader bufferedReader = new BufferedReader(fileReader)) {
+                while ((line = bufferedReader.readLine()) != null) {
+                    obj = (JSONObject) new JSONParser().parse(line);
+                    idToCitationMap.put(obj.get("id").toString(), new Pair<>(obj.get("inCitations"), obj.get("title").toString()));
+                }
+                bufferedReader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (FileNotFoundException | ParseException e) {
+            e.printStackTrace();
+        }
+        return idToCitationMap;
+    }
+
+    private static void WriteJson(HashMap<String, Pair<Object, String>> idToCitationMap, ArrayList<Pair<Integer, Integer>> edges, HashMap<Integer, String> seqToNodes, int nodesCount) {
+        int edgeSize = edges.size();
+        String outFileName = "C:\\Users\\Elijah\\Documents\\CS3219\\Assignment 4\\task 4 json.txt";
         try {
             FileWriter fileWriter = new FileWriter(outFileName);
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
             bufferedWriter.write("{");
             bufferedWriter.write("\"nodes\":[");
-            for (int i = 0; i <= nodesCount; i++) {
-                bufferedWriter.write("{\"name\":\"" + seqToNodes.get(i) + "\",\"group\":1},\n");
+            for (int i = 0; i < nodesCount; i++) {
+                bufferedWriter.write("{\"name\":\"" + idToCitationMap.get(seqToNodes.get(i)).getValue() + "\",\"group\":1},\n");
             }
+            bufferedWriter.write("{\"name\":\"" + idToCitationMap.get(seqToNodes.get(nodesCount)).getValue() + "\",\"group\":1}\n");
             bufferedWriter.write("],");
             bufferedWriter.write("\"links\":[");
-            for (Pair<Integer, Integer> edge : edges) {
-                bufferedWriter.write("{\"source\":" + edge.getKey().toString() + ",\"target\":" + edge.getValue().toString() + ",\"weight\": 1},\n"  );
+            for (int i = 0; i < edgeSize - 1; i++) {
+                bufferedWriter.write("{\"source\":" + edges.get(i).getKey().toString() + ",\"target\":" + edges.get(i).getValue().toString() + ",\"weight\": 1},\n"  );
             }
+            bufferedWriter.write("{\"source\":" + edges.get(edgeSize -1).getKey().toString() + ",\"target\":" + edges.get(edgeSize -1).getValue().toString() + ",\"weight\": 1}\n"  );
             bufferedWriter.write("]");
             bufferedWriter.write("}");
             bufferedWriter.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
