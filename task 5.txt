@@ -1,0 +1,9 @@
+venue,count
+PloS one,4556
+Brain research,849
+ArXiv,1775
+Neuroscience,514
+Science,611
+The Journal of neuroscien...,854
+Neuroscience letters,627
+Scientific reports,1004
