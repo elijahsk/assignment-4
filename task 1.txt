@@ -1,0 +1,11 @@
+author,count
+Damien Chablat,6
+Mita Nasipuri,4
+Zhiyuan Yan,4
+Uwe Aickelin,4
+Rodrigo C. de Lamare,3
+Michael Hilker,3
+Aaron C. Courville,3
+H. Vincent Poor,3
+Jan A. Bergstra,3
+Sugata Sanyal,3

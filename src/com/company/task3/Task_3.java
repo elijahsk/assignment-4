@@ -1,6 +1,5 @@
 package com.company.task3;
 
-import javafx.util.Pair;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -38,7 +37,7 @@ public class Task_3 {
                 yearToCountMap.put(i, 0);
             }
         }
-        WriteFile(yearToCountMap, minYear, maxYear);
+        writeFile(yearToCountMap, minYear, maxYear);
     }
 
 
@@ -67,7 +66,7 @@ public class Task_3 {
         return idToYearMap;
     }
 
-    private static void WriteFile(HashMap<Integer, Integer> yearToCountMap, int minYear, int maxYear) {
+    private static void writeFile(HashMap<Integer, Integer> yearToCountMap, int minYear, int maxYear) {
         String outFileName = "C:\\Users\\Elijah\\Documents\\CS3219\\Assignment 4\\task 3.txt";
         try {
             FileWriter fileWriter = new FileWriter(outFileName);

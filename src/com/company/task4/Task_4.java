@@ -43,7 +43,7 @@ public class Task_4 {
                 }
             }
 
-        WriteJson(idToCitationMap, edges, seqToNodes, nodesCount);
+        writeJson(idToCitationMap, edges, seqToNodes, nodesCount);
     }
 
     private static HashMap<String, Pair<Object, String>> readJson() {
@@ -69,7 +69,7 @@ public class Task_4 {
         return idToCitationMap;
     }
 
-    private static void WriteJson(HashMap<String, Pair<Object, String>> idToCitationMap, ArrayList<Pair<Integer, Integer>> edges, HashMap<Integer, String> seqToNodes, int nodesCount) {
+    private static void writeJson(HashMap<String, Pair<Object, String>> idToCitationMap, ArrayList<Pair<Integer, Integer>> edges, HashMap<Integer, String> seqToNodes, int nodesCount) {
         int edgeSize = edges.size();
         String outFileName = "C:\\Users\\Elijah\\Documents\\CS3219\\Assignment 4\\task 4 json.txt";
         try {
