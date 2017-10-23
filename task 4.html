@@ -44,7 +44,7 @@
             .enter().append("g")
             .attr("class", "node")
             .call(force.drag);
-            
+
         var link = svg.selectAll(".link")
             .data(json.links)
             .enter().append("line")
