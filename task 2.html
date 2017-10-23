@@ -19,6 +19,7 @@
 
 <body>
     <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
     <script>
     var margin = { top: 60, right: 60, bottom: 100, left: 60 },
         width = 1000 - margin.left - margin.right,
@@ -52,6 +53,15 @@
             d.paper = d.paper;
             d.citation = +d.citation;
         });
+
+        var tip = d3.tip()
+            .attr('class', 'd3-tip')
+            .offset([-10, 0])
+            .html(function(d) {
+                return "<strong>No of InCitations:</strong> <span style='color:red'>" + d.citation + "</span>";
+            })
+
+        svg.call(tip);
 
         x.domain(data.map(function(d) { return d.paper; }));
         y.domain([0, d3.max(data, function(d) { return d.citation; })]);
@@ -90,7 +100,9 @@
             .attr("x", function(d) { return x(d.paper); })
             .attr("width", x.rangeBand())
             .attr("y", function(d) { return y(d.citation); })
-            .attr("height", function(d) { return height - y(d.citation); });
+            .attr("height", function(d) { return height - y(d.citation); })
+            .on('mouseover', tip.show)
+            .on('mouseout', tip.hide);
 
         function wrap(text, width) {
             text.each(function() {
