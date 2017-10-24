@@ -9,7 +9,8 @@ import java.io.*;
 import java.util.*;
 
 public class Task_1 {
-
+    private String inFileName = "C:\\Users\\Elijah\\Documents\\CS3219\\extract.txt";
+    private String outFileName = "C:\\Users\\Elijah\\Documents\\CS3219\\Assignment 4\\task 1.txt";
     private HashMap<String, String> authorIDToName;
     private HashMap<String, Integer> authorIDToCount;
     private ArrayList<Pair<String, Integer>> authorIDToCountList;
@@ -46,7 +47,6 @@ public class Task_1 {
         authorIDToCount = new HashMap<String, Integer>();
         authorIDToName = new HashMap<String, String>();
         JSONObject obj;
-        String inFileName = "C:\\Users\\Elijah\\Documents\\CS3219\\extract.txt";
         String line = null;
         int count = 0;
         try {
@@ -82,7 +82,6 @@ public class Task_1 {
     }
 
     private void writeFile() {
-        String outFileName = "C:\\Users\\Elijah\\Documents\\CS3219\\Assignment 4\\task 1.txt";
         try {
             FileWriter fileWriter = new FileWriter(outFileName);
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);

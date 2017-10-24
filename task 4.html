@@ -1,6 +1,7 @@
 <!DOCTYPE html>
+<head>
 <meta charset="utf-8">
-<script src="http://d3js.org/d3.v2.min.js?2.9.3"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.4.6/d3.min.js"></script>
 <style>
 .link {
     stroke: #aaa;
@@ -18,11 +19,11 @@
     fill: #555;
 }
 </style>
-
+</head>
 <body>
     <script>
-    var width = 1200,
-        height = 800
+    var height = 600;
+    var width = 900;
 
     var svg = d3.select("body").append("svg")
         .attr("width", width)
@@ -34,11 +35,13 @@
         .charge(-100)
         .size([width, height]);
 
-    d3.json("http://localhost:8000/task%204%20json.txt", function(json) {
+    d3.json("task 4.txt", function(json) {
+        
         force
             .nodes(json.nodes)
             .links(json.links)
             .start();
+
         var node = svg.selectAll(".node")
             .data(json.nodes)
             .enter().append("g")
@@ -51,6 +54,8 @@
             .attr("class", "link")
             .style("stroke-width", function(d) { return 1; });
 
+
+        // nodes info
         node.append("circle")
             .attr("r", "5");
 
@@ -59,6 +64,7 @@
             .attr("dy", ".35em")
             .text(function(d) { return d.name });
 
+        // edges  
         force.on("tick", function() {
             link.attr("x1", function(d) { return d.source.x; })
                 .attr("y1", function(d) { return d.source.y; })

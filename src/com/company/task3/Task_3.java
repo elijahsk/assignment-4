@@ -8,16 +8,30 @@ import java.io.*;
 import java.util.*;
 
 public class Task_3 {
-
-    public static final int MAX_YEAR_BOUND = 9999999;
-    public static final int MIN_YEAR_BOUND = 0;
+    private String inFileName = "C:\\Users\\Elijah\\Documents\\CS3219\\extract.txt";
+    private String outFileName = "C:\\Users\\Elijah\\Documents\\CS3219\\Assignment 4\\task 3.txt";
+    private static final int MAX_YEAR_BOUND = 9999999;
+    private static final int MIN_YEAR_BOUND = 0;
+    private HashMap<String, Integer> idToYearMap;
+    private HashMap<Integer, Integer> yearToCountMap;
+    private int minYear;
+    private int maxYear;
 
     public static void main(String[] args) {
-        HashMap<String, Integer> idToYearMap = readJson();
+        Task_3 temp = new Task_3();
+        temp.run();
+    }
 
-        HashMap<Integer, Integer> yearToCountMap = new HashMap<Integer, Integer>();
-        int minYear = MAX_YEAR_BOUND;
-        int maxYear = MIN_YEAR_BOUND;
+    private void run() {
+        readJson();
+        process();
+        writeFile();
+    }
+
+    private void process() {
+        yearToCountMap = new HashMap<Integer, Integer>();
+        minYear = MAX_YEAR_BOUND;
+        maxYear = MIN_YEAR_BOUND;
         Set entrySet = idToYearMap.entrySet();
         Iterator it = entrySet.iterator();
         while(it.hasNext()){
@@ -37,14 +51,12 @@ public class Task_3 {
                 yearToCountMap.put(i, 0);
             }
         }
-        writeFile(yearToCountMap, minYear, maxYear);
     }
 
 
-    private static HashMap<String, Integer> readJson() {
-        HashMap<String, Integer> idToYearMap = new HashMap<String, Integer>();
+    private HashMap<String, Integer> readJson() {
+        idToYearMap = new HashMap<String, Integer>();
         JSONObject obj;
-        String inFileName = "C:\\Users\\Elijah\\Documents\\CS3219\\extract.txt";
         String line = null;
         int count = 0;
         try {
@@ -66,8 +78,7 @@ public class Task_3 {
         return idToYearMap;
     }
 
-    private static void writeFile(HashMap<Integer, Integer> yearToCountMap, int minYear, int maxYear) {
-        String outFileName = "C:\\Users\\Elijah\\Documents\\CS3219\\Assignment 4\\task 3.txt";
+    private void writeFile() {
         try {
             FileWriter fileWriter = new FileWriter(outFileName);
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);

@@ -9,47 +9,62 @@ import java.io.*;
 import java.util.*;
 
 public class Task_4 {
+    private String initialID = "36adf8c327b95bdffe2778bf022e0234d433454a";
+    private String inFileName = "C:\\Users\\Elijah\\Documents\\CS3219\\extract.txt";
+    private String outFileName = "C:\\Users\\Elijah\\Documents\\CS3219\\Assignment 4\\task 4.txt";
+    private HashMap<String, Pair<Object, String>> idToCitationMap;
+    private HashMap<String, Integer> nodesToSeq;
+    private HashMap<Integer, String> seqToNodes;
+    private ArrayList<Pair<Integer, Integer>> edges;
+    private int nodesCount;
 
     public static void main(String[] args) {
-        HashMap<String, Pair<Object, String>> idToCitationMap = readJson();
+        Task_4 temp = new Task_4();
+        temp.run();
+    }
 
-        ArrayList<Pair<Integer, Integer>> edges = new ArrayList<Pair<Integer, Integer>>();
-        HashMap<String, Integer> nodesToSeq = new HashMap<String, Integer>();
-        HashMap<Integer, String> seqToNodes = new HashMap<Integer, String>();
+    public void run() {
+        readJson();
+        process();
+        writeFile();
+    }
+
+    private void process() {
+        edges = new ArrayList<Pair<Integer, Integer>>();
+        nodesToSeq = new HashMap<String, Integer>();
+        seqToNodes = new HashMap<Integer, String>();
         LinkedList<String> queue = new LinkedList<String>();
         LinkedList<Integer> tierQueue = new LinkedList<Integer>();
-        int nodesCount = 0;
-        String initialID = "36adf8c327b95bdffe2778bf022e0234d433454a";
+        nodesCount = 0;
+
         queue.add(initialID);
         nodesToSeq.put(initialID, nodesCount);
         seqToNodes.put(nodesCount, initialID);
         tierQueue.add(0);
 
         while (queue.size() > 0) {
-                String currID = queue.poll();
-                int currCount = nodesToSeq.get(currID);
-                int tier = tierQueue.poll();
+            String currID = queue.poll();
+            int currCount = nodesToSeq.get(currID);
+            int tier = tierQueue.poll();
 
-                ArrayList<String> nextIDs = (ArrayList<String>) idToCitationMap.get(currID).getKey();
-                for (String ID : nextIDs) {
-                    if ((idToCitationMap.containsKey(ID)) && (!nodesToSeq.containsKey(ID)) && tier < 2) {
-                        nodesCount++;
-                        queue.add(ID);
-                        tierQueue.add(tier + 1);
-                        nodesToSeq.put(ID, nodesCount);
-                        seqToNodes.put(nodesCount, ID);
-                        edges.add(new Pair<>(currCount, nodesCount));
-                    }
+            ArrayList<String> nextIDs = (ArrayList<String>) idToCitationMap.get(currID).getKey();
+            for (String ID : nextIDs) {
+                if ((idToCitationMap.containsKey(ID)) && (!nodesToSeq.containsKey(ID)) && tier < 2) {
+                    nodesCount++;
+                    queue.add(ID);
+                    tierQueue.add(tier + 1);
+                    nodesToSeq.put(ID, nodesCount);
+                    seqToNodes.put(nodesCount, ID);
+                    edges.add(new Pair<>(currCount, nodesCount));
                 }
             }
+        }
 
-        writeJson(idToCitationMap, edges, seqToNodes, nodesCount);
     }
 
-    private static HashMap<String, Pair<Object, String>> readJson() {
-        HashMap<String, Pair<Object, String>> idToCitationMap = new HashMap<String, Pair<Object, String>>();
+    private void readJson() {
+        idToCitationMap = new HashMap<String, Pair<Object, String>>();
         JSONObject obj;
-        String inFileName = "C:\\Users\\Elijah\\Documents\\CS3219\\extract.txt";
         String line = null;
         int count = 0;
         try {
@@ -66,12 +81,10 @@ public class Task_4 {
         } catch (FileNotFoundException | ParseException e) {
             e.printStackTrace();
         }
-        return idToCitationMap;
     }
 
-    private static void writeJson(HashMap<String, Pair<Object, String>> idToCitationMap, ArrayList<Pair<Integer, Integer>> edges, HashMap<Integer, String> seqToNodes, int nodesCount) {
+    private void writeFile() {
         int edgeSize = edges.size();
-        String outFileName = "C:\\Users\\Elijah\\Documents\\CS3219\\Assignment 4\\task 4 json.txt";
         try {
             FileWriter fileWriter = new FileWriter(outFileName);
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);

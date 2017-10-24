@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<meta charset="utf-8">
-
 <head>
+	<meta charset="utf-8">
+	<script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.4.6/d3.min.js"></script>
     <title>Task 2 Bar Chart</title>
     <style>
     .axis {
@@ -18,14 +18,11 @@
 </head>
 
 <body>
-    <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
     <script>
-    var margin = { top: 60, right: 60, bottom: 100, left: 60 },
-        width = 1000 - margin.left - margin.right,
-        height = 600 - margin.top - margin.bottom;
-
-    // Parse the date / time
+    var height = 500;
+    var width = 800;
+    var margin = { top: 60, right: 60, bottom: 100, left: 60 };
 
     var x = d3.scale.ordinal().rangeRoundBands([0, width], .05);
 
@@ -44,8 +41,7 @@
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
-        .attr("transform",
-            "translate(" + margin.left + "," + margin.top + ")");
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     d3.csv("task 2.txt", function(error, data) {
 
@@ -66,6 +62,16 @@
         x.domain(data.map(function(d) { return d.paper; }));
         y.domain([0, d3.max(data, function(d) { return d.citation; })]);
 
+        // title
+        svg.append("text")
+            .attr("x", (width + (margin.left + margin.right)) / 2)
+            .attr("y", 0)
+            .attr("text-anchor", "middle")
+            .style("font-size", "21px")
+            .style("font-family", "sans-serif")
+            .text("Top 5 Papers with Most Number of InCitations in ArXiv");
+
+        // x-axis
         svg.append("g")
             .attr("class", "x axis")
             .attr("transform", "translate(0," + height + ")")
@@ -75,14 +81,7 @@
             .style("font-size", "15px")
             .call(wrap, x.rangeBand());
 
-        svg.append("text")
-            .attr("x", (width + (margin.left + margin.right)) / 2)
-            .attr("y", 0)
-            .attr("text-anchor", "middle")
-            .style("font-size", "21px")
-            .style("font-family", "sans-serif")
-            .text("Top 5 Papers with Most Number of InCitations in ArXiv");
-
+        //y-axis
         svg.append("g")
             .attr("class", "y axis")
             .call(yAxis)
@@ -93,6 +92,7 @@
             .style("text-anchor", "end")
             .text("Number of InCitations");
 
+        // bar
         svg.selectAll("bar")
             .data(data)
             .enter().append("rect")
@@ -104,6 +104,7 @@
             .on('mouseover', tip.show)
             .on('mouseout', tip.hide);
 
+        // Wrapping text
         function wrap(text, width) {
             text.each(function() {
                 var text = d3.select(this),

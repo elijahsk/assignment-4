@@ -12,7 +12,8 @@ import java.util.HashMap;
 import java.util.Set;
 
 public class Task_2 {
-
+    private String inFileName = "C:\\Users\\Elijah\\Documents\\CS3219\\extract.txt";
+    private String outFileName = "C:\\Users\\Elijah\\Documents\\CS3219\\Assignment 4\\task 2.txt";
     private HashMap<String, String> paperIDToPaperNameMap;
     private ArrayList<Pair<String, Integer>> paperIDToCitationNumList;
 
@@ -43,7 +44,6 @@ public class Task_2 {
         paperIDToPaperNameMap = new HashMap<String, String>();
         paperIDToCitationNumList = new ArrayList<Pair<String, Integer>>();
         JSONObject obj;
-        String inFileName = "C:\\Users\\Elijah\\Documents\\CS3219\\extract.txt";
         String line = null;
         int count = 0;
         try {
@@ -69,7 +69,6 @@ public class Task_2 {
     }
 
     private void writeFile() {
-        String outFileName = "C:\\Users\\Elijah\\Documents\\CS3219\\Assignment 4\\task 2.txt";
         try {
             FileWriter fileWriter = new FileWriter(outFileName);
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);

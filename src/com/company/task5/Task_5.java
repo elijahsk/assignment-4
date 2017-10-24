@@ -13,6 +13,8 @@ import java.util.Set;
 
 public class Task_5 {
 
+    private String inFileName = "C:\\Users\\Elijah\\Documents\\CS3219\\extract.txt";
+    private String outFileName = "C:\\Users\\Elijah\\Documents\\CS3219\\Assignment 4\\task 5.txt";
     private HashMap<String, Integer> venueToCount;
 
     public static void main(String[] args) {
@@ -30,7 +32,6 @@ public class Task_5 {
         venueToCount = new HashMap<String, Integer>();
 
         JSONObject obj;
-        String inFileName = "C:\\Users\\Elijah\\Documents\\CS3219\\extract.txt";
         String line = null;
         int count = 0;
         try {
@@ -56,7 +57,6 @@ public class Task_5 {
     }
 
     private void writeFile() {
-        String outFileName = "C:\\Users\\Elijah\\Documents\\CS3219\\Assignment 4\\task 5.txt";
         try {
             FileWriter fileWriter = new FileWriter(outFileName);
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
